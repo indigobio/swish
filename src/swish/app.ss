@@ -152,6 +152,9 @@
           (parameterize ([waiter-prompt-string (if (opt 'quiet) "" ">")]
                          [repl-level (+ (repl-level) 1)])
             (for-each load filenames)
+            (when (interactive?)
+              (signal-handler SIGINT
+                (let ([p self]) (lambda (n) (keyboard-interrupt p)))))
             (new-cafe)))]
        [else                            ; script
         (let ([script-file (car files)]
